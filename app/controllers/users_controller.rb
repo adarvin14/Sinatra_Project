@@ -1,4 +1,4 @@
-Class UsersController < ApplicataionController
+class UsersController < ApplicataionController
 
     get '/login' do
         erb :'users/login'
