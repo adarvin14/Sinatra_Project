@@ -2,14 +2,10 @@
 <hr>
 <br>
 
- <% @songs.each do |s| %>
-  <p><a href="/songs/<%= s.id %>"><%= s.title %><%= s.artist %><%= s.genre %><%= s.album %><%= s.release_date %></a><</p>
- <% end %>
+<% @songs.each do |s| %>
+    <p><a href="/songs/<%= s.id %>"><%= s.title %><%= s.artist %><%= s.genre %><%= s.album %><%= s.release_date %></a><</p>
+<% end %>
  
- <br>
- 
- <a href="/songs/new">Add Song</a>
- <br>
- 
- <br>
- <a href="/logout">Logout</a>
+
+#button "Add New Song" that links to "/songs/new"
+#button "Logout" that links to "/logout"
