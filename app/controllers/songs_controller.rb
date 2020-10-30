@@ -25,8 +25,9 @@ class SongsController < ApplicationController
 
     get "/songs/:id" do
         if logged_in?
-            @song = current_user.songs.find_by(params)
+            @song = current_user.songs.find_by(id: params[:id])
             erb :"songs/show"
+            #if song is not listed, redirect to list of songs
         else
             redirect '/login'
         end
