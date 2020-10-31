@@ -6,3 +6,28 @@
 #display release date
 
 #edit, delete and back buttons
+<h3><%= @song.title.gsub(/\w+/, &:capitalize) %></h3>
+<hr width="25%">
+<p>
+    <p>Artist: <%= @song.artist %></p>
+    <p>Genre: <%= @song.genre %></p>
+    <p>Album: <%= @song.album %></p>
+    <p>Release Date: <%= @song.release_date %></p>
+</p>
+
+<header>
+    <nav>
+        <ul>
+            <li><a href="/songs"><button> Back </button></a></li>
+            <li><a href="/logout"><button>Log Out</button></a></li>
+            <% if current_user.created_songs.include?(@song)%>
+            <li><a href="/songs/<%= @songs.id %>/edit"><button>Edit Song</button></a></li>
+            <% end %>
+            <li><form method="POST" action="/games/<%= @game.id %>"  class="formRounded">
+                    <input id="hidden" type="hidden" name="_method" value="delete">
+                    <input type="submit" value="Delete Game">
+                </form>
+            </li>
+        </ul>
+      </nav>
+</header>

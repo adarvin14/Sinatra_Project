@@ -1,11 +1,19 @@
-<h1>Saved Songs</h1>
+<h1>Hi, <%= current_user.username %>! Here Are Your Saved Songs</h1>
 <hr>
 <br>
 
-<% @songs.each do |s| %>
+<%= @songs.each do |s| %>
     <p><a href="/songs/<%= s.id %>"><%= s.title %><%= s.artist %><%= s.genre %><%= s.album %><%= s.release_date %></a><</p>
 <% end %>
  
+<header>
+    <nav>
+        <ul>
+            <li><a href="/songs/new"><button>Add New Song</button></a></li>
+            <li><a href="/logout"><button>Log Out</button></a></li>
+        </ul>
+      </nav>
+</header>
 
 #button "Add New Song" that links to "/songs/new"
 #button "Logout" that links to "/logout"
