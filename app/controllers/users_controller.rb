@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     end
 
     post '/signup' do
-        user = User.create(username: params[:username],
+        user = User.create(name: params[:name],
         username: params[:username],
         password: params[:password])
         
