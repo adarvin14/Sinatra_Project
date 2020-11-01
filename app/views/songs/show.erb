@@ -5,13 +5,14 @@
     <p>Album: <%= @song.album %></p>
     <p>Genre: <%= @song.genre %></p>
     <p>Release Date: <%= @song.release_date %></p>
+    <p>Song ID: <%= @song.id %></p>
 </p>
 
 <header>
     <nav>
         <ul>
             <li><a href="/songs"><button> Back </button></a></li>
-            <li><a href="/songs/:id/edit"><button> Edit Song </button></a></li>
+            <li><a href="/songs/<%= @song.id %>/edit"><button> Edit Song </button></a></li>
             <li><a href="/logout"><button>Log Out</button></a></li>
             <li><form method="POST" action="/songs/<%= @song.id %>"  class="formRounded">
                     <input id="hidden" type="hidden" name="_method" value="delete">

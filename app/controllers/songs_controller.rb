@@ -22,7 +22,7 @@ class SongsController < ApplicationController
         #if the song is saved after being created, redirect to /songs
         #else, redirect to /songs/new
         
-        if @song = Song.find_by(title: params[:title].downcase)
+        if @song = Song.find_by(title: params[:title])
             current_user.songs << @song
             redirect '/songs'
         else
@@ -67,9 +67,9 @@ class SongsController < ApplicationController
                 @song.genre = params[:genre]
                 @song.release_date = params[:release_date]
                 if @song.save
-                    redirect '/songs/:id'
+                    redirect '/songs'
                 else
-                    redirect '/songs/:id/edit'
+                    redirect '/songs/#{params[:id]}/edit'
                 end
             else
                 redirect '/songs'
