@@ -5,7 +5,7 @@ class CreateSongs < ActiveRecord::Migration
       t.string :artist
       t.string :genre
       t.string :album
-      t.datetime :release_date
+      t.integer :release_date
       t.integer :user_id
     end
   end

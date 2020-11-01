@@ -41,7 +41,7 @@ class SongsController < ApplicationController
         if logged_in?
             @song = current_user.songs.find_by(id: params[:id])
             if @song
-                erb :"songs/show"
+                erb :'songs/show'
             #if song is not listed, redirect to list of songs
             end
         else
@@ -51,20 +51,16 @@ class SongsController < ApplicationController
 
     get '/songs/:id/edit' do
         if logged_in?
-            @song = current_user.songs.find_by(params)
-            erb :'/songs/edit'
+            @song = current_user.songs.find_by(id: params[:id])
+            erb :'songs/edit'
         else
             redirect '/login'
         end
     end
 
     patch '/songs/:id' do
-        #find song by id
-        #song attributes (@song.attribute = params[:attribute], complete for each attribute)
-        #save song and redirect to the song that is saved
-        #else redirect to edit page for the song
         if logged_in?
-            @song = current_user.created_songs.find_by(id: params[:id])
+            @song = current_user.songs.find_by(id: params[:id])
             if @song
                 @song.title = params[:title]
                 @song.artist = params[:artist]
@@ -72,7 +68,7 @@ class SongsController < ApplicationController
                 @song.genre = params[:genre]
                 @song.release_date = params[:release_date]
                 if @song.save
-                    redirect "/songs/#{@song.id}"
+                    redirect "/songs/:id"
                 else
                     redirect "/songs/:id/edit"
                 end
@@ -87,7 +83,7 @@ class SongsController < ApplicationController
     delete '/songs/:id' do
         if logged_in?
             @song = current_user.songs.find_by(id: params[:id])
-            current_user.songs.delete(song)
+            current_user.songs.delete(@song)
             redirect '/songs'
         else
             redirect '/login'
