@@ -1,15 +1,15 @@
 class SongsController < ApplicationController
     
-    get "/songs" do
+    get '/songs' do
         if logged_in?
-            current_user.songs
-            erb :"songs/index"
+            @songs = current_user.songs.sort {|a,b| a.title <=> b.title}
+            erb :'songs/index'
         else
             redirect '/login'
         end
     end
 
-    get "/songs/new" do
+    get '/songs/new' do
         if logged_in?
             erb :'songs/new'
         else
@@ -17,30 +17,27 @@ class SongsController < ApplicationController
         end
     end
 
-    post "/songs" do
+    post '/songs' do
         #add song to user's songs list, if it's not in the db, create a new song to add
         #if the song is saved after being created, redirect to /songs
         #else, redirect to /songs/new
-        if logged_in?
-            if song = Song.find_by(title: params[:title].downcase)
-                current_user.songs << song
+        
+        if @song = Song.find_by(title: params[:title].downcase)
+            current_user.songs << @song
+            redirect '/songs'
+        else
+            params[:title].downcase!
+            game = current_user.created_songs.create(params)
+            current_user.songs << @song
+            if song.save
                 redirect '/songs'
             else
-                params[:title].downcase!
-                game = current_user.created_songs.create(params)
-                current_user.songs << song
-                if song.save
-                    redirect "/songs"
-                else
-                    redirect '/songs/new'
-                end
+                redirect '/songs/new'
             end
-        else
-            redirect '/login'
         end
     end
 
-    get "/songs/:id" do
+    get '/songs/:id' do
         if logged_in?
             @song = current_user.songs.find_by(id: params[:id])
             if @song
@@ -52,16 +49,16 @@ class SongsController < ApplicationController
         end
     end
 
-    get "/songs/:id/edit" do
+    get '/songs/:id/edit' do
         if logged_in?
             @song = current_user.songs.find_by(params)
-            erb :"/songs/edit"
+            erb :'/songs/edit'
         else
             redirect '/login'
         end
     end
 
-    patch "/songs/:id" do
+    patch '/songs/:id' do
         #find song by id
         #song attributes (@song.attribute = params[:attribute], complete for each attribute)
         #save song and redirect to the song that is saved
@@ -87,9 +84,9 @@ class SongsController < ApplicationController
         end
     end
 
-    delete "/songs/:id" do
+    delete '/songs/:id' do
         if logged_in?
-            song = current_user.songs.find_by(id: params[:id])
+            @song = current_user.songs.find_by(id: params[:id])
             current_user.songs.delete(song)
             redirect '/songs'
         else
