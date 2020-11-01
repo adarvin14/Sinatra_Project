@@ -2,7 +2,7 @@ class SongsController < ApplicationController
     
     get '/songs' do
         if logged_in?
-            @songs = current_user.songs.sort {|a,b| a.title <=> b.title}
+            @songs = current_user.songs
             erb :'songs/index'
         else
             redirect '/login'
@@ -27,9 +27,9 @@ class SongsController < ApplicationController
             redirect '/songs'
         else
             params[:title].downcase!
-            game = current_user.created_songs.create(params)
+            @song = Song.create(params)
             current_user.songs << @song
-            if song.save
+            if @song.save
                 redirect '/songs'
             else
                 redirect '/songs/new'
