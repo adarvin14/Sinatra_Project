@@ -42,7 +42,6 @@ class SongsController < ApplicationController
             @song = current_user.songs.find_by(id: params[:id])
             if @song
                 erb :'songs/show'
-            #if song is not listed, redirect to list of songs
             end
         else
             redirect '/login'
@@ -68,9 +67,9 @@ class SongsController < ApplicationController
                 @song.genre = params[:genre]
                 @song.release_date = params[:release_date]
                 if @song.save
-                    redirect "/songs/:id"
+                    redirect '/songs/:id'
                 else
-                    redirect "/songs/:id/edit"
+                    redirect '/songs/:id/edit'
                 end
             else
                 redirect '/songs'
