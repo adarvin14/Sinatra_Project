@@ -1,20 +1,14 @@
 class SongsController < ApplicationController
     
     get '/songs' do
-        if logged_in?
+        session_confirmed?
             @songs = current_user.songs
             erb :'songs/index'
-        else
-            redirect '/login'
-        end
     end
 
     get '/songs/new' do
-        if logged_in?
+        session_confirmed?
             erb :'songs/new'
-        else
-            redirect '/login'
-        end
     end
 
     post '/songs' do
@@ -22,71 +16,49 @@ class SongsController < ApplicationController
         #if the song is saved after being created, redirect to /songs
         #else, redirect to /songs/new
         
-        if @song = Song.find_by(title: params[:title])
-            current_user.songs << @song
+        if existing_song
+            current_user.songs << existing_song
             redirect '/songs'
         else
-            params[:title].downcase!
-            @song = Song.create(params)
-            current_user.songs << @song
+            @song = current_user.songs.build(params)
             if @song.save
                 redirect '/songs'
             else
-                redirect '/songs/new'
+                @error = "Your song didn't save, try again!"
+                
+                erb :'/songs/new'
             end
         end
     end
 
     get '/songs/:id' do
-        if logged_in?
-            @song = current_user.songs.find_by(id: params[:id])
-            if @song
-                erb :'songs/show'
-            end
-        else
-            redirect '/login'
-        end
+        session_confirmed?
+            selected_song
+            erb :'songs/show'
     end
 
     get '/songs/:id/edit' do
-        if logged_in?
-            @song = current_user.songs.find_by(id: params[:id])
+        session_confirmed?
+            selected_song
             erb :'songs/edit'
-        else
-            redirect '/login'
-        end
     end
 
     patch '/songs/:id' do
-        if logged_in?
-            @song = current_user.songs.find_by(id: params[:id])
-            if @song
-                @song.title = params[:title]
-                @song.artist = params[:artist]
-                @song.album = params[:album]
-                @song.genre = params[:genre]
-                @song.release_date = params[:release_date]
-                if @song.save
-                    redirect '/songs'
-                else
-                    redirect '/songs/#{params[:id]}/edit'
-                end
-            else
-                redirect '/songs'
-            end
+        session_confirmed?
+            selected_song
+            params.delete(:_method)
+        if selected_song.update(params)
+            redirect "/songs/#{@song.id}"
         else
-            redirect '/login'
+            redirect "/songs/#{@song.id}/edit"
         end
     end
 
     delete '/songs/:id' do
-        if logged_in?
-            @song = current_user.songs.find_by(id: params[:id])
+        session_confirmed?
+            selected_song
             current_user.songs.delete(@song)
             redirect '/songs'
-        else
-            redirect '/login'
-        end
     end
 
 end
